@@ -47,6 +47,7 @@ public class CommentService {
         );
     }
 
+    @Transactional
     public List<CommentResponse> getComments(long todoId) {
         List<Comment> commentList = commentRepository.findByTodoIdWithUser(todoId);
 
