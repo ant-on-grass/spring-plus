@@ -21,7 +21,7 @@ public class AdminAccessLoggingAspect {
 
     @Before("execution(* org.example.expert.domain.user.controller.UserAdminController.changeUserRole(..))")
     public void logAfterChangeUserRole(JoinPoint joinPoint) {
-        log.info("::: test_aop_@after_AOPConfig_start");
+        log.info("::: test_aop_@before_AOPConfig_start");
         String userId = String.valueOf(request.getAttribute("userId"));
         String requestUrl = request.getRequestURI();
         LocalDateTime requestTime = LocalDateTime.now();

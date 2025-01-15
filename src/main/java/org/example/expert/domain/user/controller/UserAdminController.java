@@ -18,7 +18,7 @@ public class UserAdminController {
 
     @PatchMapping("/admin/users/{userId}")
     public void changeUserRole(@PathVariable long userId, @RequestBody UserRoleChangeRequest userRoleChangeRequest) {
-        log.info("::: test_aop_@after_start_controller");
+        log.info("::: test_aop_@before_start_controller");
         userAdminService.changeUserRole(userId, userRoleChangeRequest);
     }
 }
