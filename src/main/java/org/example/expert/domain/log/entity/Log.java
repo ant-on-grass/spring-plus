@@ -39,9 +39,17 @@ public class Log extends Timestamped {
     this.passOrNot = passOrNot;
   }
 
+  public Log(User user, boolean passOrNot) {
+    this.user = user;
+    this.passOrNot = passOrNot;
+  }
+
   public Log(User user) {
     this.user = user;
 
   }
 
+  public static Log updateLog(Long id, User user, boolean passOrNot) {
+    return new Log(id,user,passOrNot);
+  }
 }

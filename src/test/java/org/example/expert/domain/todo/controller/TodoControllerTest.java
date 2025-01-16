@@ -30,6 +30,7 @@ class TodoControllerTest {
     @MockBean
     private TodoService todoService;
 
+
     @Test
     void todo_단건_조회에_성공한다() throws Exception {
         // given

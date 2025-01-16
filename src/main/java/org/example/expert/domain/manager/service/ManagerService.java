@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
 import org.example.expert.domain.log.entity.Log;
-import org.example.expert.domain.log.repository.LogRepository;
+import org.example.expert.domain.log.service.LogService;
 import org.example.expert.domain.manager.dto.request.ManagerSaveRequest;
 import org.example.expert.domain.manager.dto.response.ManagerResponse;
 import org.example.expert.domain.manager.dto.response.ManagerSaveResponse;
@@ -15,15 +15,12 @@ import org.example.expert.domain.todo.repository.TodoRepository;
 import org.example.expert.domain.user.dto.response.UserResponse;
 import org.example.expert.domain.user.entity.User;
 import org.example.expert.domain.user.repository.UserRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -33,12 +30,18 @@ public class ManagerService {
     private final ManagerRepository managerRepository;
     private final UserRepository userRepository;
     private final TodoRepository todoRepository;
-    private final LogRepository logRepository;
+    private final LogService logSavefalse;
 
-    @Transactional(noRollbackFor = InvalidRequestException.class)
+    @Transactional // 1. (noRollbackFor = InvalidRequestException.class)
     public ManagerSaveResponse saveManager(AuthUser authUser, long todoId, ManagerSaveRequest managerSaveRequest) {
         User user = User.fromAuthUser(authUser);
-        Log log = logRepository.save(new Log(user));
+        // 1. Log log = logRepository.save(new Log(user));
+        // 호출을 하여라~
+
+        // 2. LogService.logSave(user);
+
+         Log log = logSavefalse.logSavefalse(managerSaveRequest.getLogId(),user); // 3.
+
 
         // 일정을 만든 유저
 
@@ -59,14 +62,16 @@ public class ManagerService {
         Manager newManagerUser = new Manager(managerUser, todo);
         Manager savedManagerUser = managerRepository.save(newManagerUser);
 
-        Log updateLog = new Log(log.getId(),user,true);
-        logRepository.save(updateLog);
+        logSavefalse.logSavetrue(user,log); // 3.
+        // 1. Log updateLog = new Log(log.getId(),user,true);
+        // 1. logSavefalse.logRepository.save(updateLog);
 
         return new ManagerSaveResponse(
                 savedManagerUser.getId(),
                 new UserResponse(managerUser.getId(), managerUser.getEmail())
         );
     }
+
 
     public List<ManagerResponse> getManagers(long todoId) {
         Todo todo = todoRepository.findById(todoId)
