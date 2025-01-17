@@ -10,6 +10,10 @@ import org.example.expert.domain.todo.dto.response.TodoSaveResponse;
 import org.example.expert.domain.todo.service.TodoService;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,9 +34,16 @@ public class TodoController {
     @GetMapping("/todos")
     public ResponseEntity<Page<TodoResponse>> getTodos(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = "10") int size,
+        @RequestParam(required = false) String weather,
+        @RequestParam(required = false) String select1_1,
+        @RequestParam(required = false) String select1_2
     ) {
-        return ResponseEntity.ok(todoService.getTodos(page, size));
+        Sort sort = Sort.unsorted();
+
+        Pageable pageable = PageRequest.of(page - 1, size, sort);
+
+      return ResponseEntity.ok(todoService.getTodos(weather, select1_1, select1_2, pageable));
     }
 
     @GetMapping("/todos/{todoId}")

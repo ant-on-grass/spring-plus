@@ -1,5 +1,9 @@
 package org.example.expert.domain.todo.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.client.WeatherClient;
 import org.example.expert.domain.common.dto.AuthUser;
@@ -47,10 +51,15 @@ public class TodoService {
     }
 
     @Transactional(readOnly = true)
-    public Page<TodoResponse> getTodos(int page, int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
+    public Page<TodoResponse> getTodos(String weather, String  select1_1, String  select1_2, Pageable pageable) {
 
-        Page<Todo> todos = todoRepository.findAllByOrderByModifiedAtDesc(pageable);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        String validWeather = Optional.ofNullable(weather).filter(w -> !w.trim().isEmpty()).orElse(null);
+        LocalDateTime validSelect1_1 = Optional.ofNullable(select1_1).filter(s1 -> !s1.trim().isEmpty()).map(s1 -> LocalDate.parse(s1, formatter).atStartOfDay()) .orElse(null);
+        LocalDateTime validSelect1_2 = Optional.ofNullable(select1_2).filter(s2 -> !s2.trim().isEmpty()).map(s1 -> LocalDate.parse(s1, formatter).atStartOfDay()) .orElse(null);
+
+        Page<Todo> todos = todoRepository.findAllByOrderByModifiedAtDesc(pageable,validWeather, validSelect1_1,validSelect1_2);
 
         return todos.map(todo -> new TodoResponse(
                 todo.getId(),
