@@ -31,7 +31,7 @@ public class TodoController {
         return ResponseEntity.ok(todoService.saveTodo(authUser, todoSaveRequest));
     }
 
-    @GetMapping("/todos")
+    @GetMapping("/todos") // 검색 조건 연습용
     public ResponseEntity<Page<TodoResponse>> getTodos(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -50,4 +50,32 @@ public class TodoController {
     public ResponseEntity<TodoResponse> getTodo(@PathVariable long todoId) {
         return ResponseEntity.ok(todoService.getTodo(todoId));
     }
+
+//    @GetMapping("/todos") // 페이지 정렬 연습용
+//    public ResponseEntity<Page<TodoResponse>> getTodos(
+//        @RequestParam(defaultValue = "1") int page,  // 페이지 번호 (기본값: 1)
+//        @RequestParam(defaultValue = "10") int size,  // 페이지 크기 (기본값: 10)
+//        @RequestParam(required = false) String select1,  // 첫 번째 정렬 기준 (예: weather)
+//        @RequestParam(required = false) String select2  // 두 번째 정렬 기준 (예: updatedAt)
+//    ) {
+//        // 기본 정렬을 적용 (없으면 무정렬)
+//        Sort sort = Sort.unsorted();
+//
+//        // select1이 null이 아니면 해당 값에 따라 정렬 조건 추가
+//        if (select1 != null) {
+//            sort = Sort.by(select1).descending();
+//        }
+//
+//        // select2가 null이 아니면 두 번째 정렬 기준 추가
+//        if (select2 != null) {
+//            sort = sort.and(Sort.by(select2).descending());
+//        }
+//
+//        // Pageable 객체 생성 (페이지 번호는 0부터 시작하므로 -1 처리)
+//        Pageable pageable = PageRequest.of(page - 1, size, sort);
+//
+//        // 서비스 호출 및 응답 반환
+//        return ResponseEntity.ok(todoService.getTodos(select1, select2, pageable));
+//    }
+
 }
